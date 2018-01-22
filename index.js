@@ -25,33 +25,28 @@ const swipeDirective = {
     var directionCheckDone
     var continuePropagation
 
-    function getInfo () {
+    function getInfo (srcEvt) {
       return {
         element: $el,
+        scrEvt: srcEvt,
         offset: offset,
-        directionFour: directionFour,
-        directionTwo: directionTwo,
+        startX: startX,
+        startY: startY,
         movingX: movingX,
         movingY: movingY,
-        startX: startX,
-        startY: startY
+        directionTwo: directionTwo,
+        directionFour: directionFour,
       }
     }
 
-    function setDefault (value, defaultValue) {
-      if (value === null || value === undefined) {
-        return defaultValue
-      }
-      return value
-    }
     // offset的含义由directionTwo来确定的
 
     if (argument.includes(binding.arg)) {
       $el.addEventListener('touchstart', function (e) {
         startX = e.touches[0].clientX
         startY = e.touches[0].clientY
-        directionCheckDone = null
         directionTwo = null
+        directionCheckDone = null
         continuePropagation = false
       })
 
@@ -86,15 +81,11 @@ const swipeDirective = {
           lock && (lockCheck = true)
 
           processor.onSwipe instanceof Function && (
-            continuePropagation = setDefault(
-              processor.onSwipe(getInfo(), () => {
-                lockCheck = true
-              }, () => {
-                e.stopPropagation()
-              }, () => {
-                lockCheck = false
-              }), false
-            )
+            processor.onSwipe(getInfo(), (setTo) => {
+                lockCheck = setTo
+              }, (setTo) => {
+                continuePropagation = setTo
+              })
           )
           !continuePropagation && e.stopPropagation()
           lockCheck && e.preventDefault()
@@ -102,19 +93,20 @@ const swipeDirective = {
       })
 
       $el.addEventListener('touchend', function (e) {
+        var lockCheck = false
         continuePropagation = true
-        lock && directionCheckDone && e.preventDefault()
+        lock && directionCheckDone && (lockCheck = true)
 
         directionCheckDone && processor.onSwipeDone instanceof Function && (
-          continuePropagation = setDefault(
-            processor.onSwipeDone(getInfo(), () => {
-              e.preventDefault()
-            }, () => {
-              e.stopPropagation()
-            }), true
+          processor.onSwipeDone(getInfo(), (setTo) => {
+              lockCheck = setTo
+            }, (setTo) => {
+              continuePropagation = setTo
+            }
           )
         )
         !continuePropagation && e.stopPropagation()
+        lockCheck && e.preventDefault()
       })
     } else {
       console.log(`未知自定义swipe位置参数:${binding.argument}`)

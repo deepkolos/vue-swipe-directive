@@ -14,8 +14,8 @@
   export default {
     mounted () {
       this.swipeConfig = {
-        onSwipe:     (info, prevantDefault, stopPropagation) => console.log(info),
-        onSwipeDone: (info, prevantDefault, stopPropagation) => console.log(info)
+        onSwipe:     (info, lock, propagation) => console.log(info),
+        onSwipeDone: (info, lock, propagation) => console.log(info)
       }
     },
 
@@ -25,9 +25,25 @@
     }
   }
 </script>
+```
 
-<style scoped lang="scss">
-</style>
+### 参数解析
+
+```javascript
+var info = {
+      scrEvt: Event,
+      offset: Number,
+      startY: Number,
+      startX: Number,
+      movingX: Number,
+      movingY: Number,
+      element: HTMLElement,
+      directionTwo: String,  // horizonal, vertical
+      directionFour: String, // right, left, up, down
+    };
+
+var lock        = Function(Boolean); // lock(true/false)        是否执行preventDefault
+var propagation = Function(Boolean); // propagation(true/false) 是否执行stopPropagation
 
 ```
 
