@@ -28,14 +28,19 @@
 ```
 
 #### swipeDirective的参数
+
 ```
 v-swipe:direction.lock="swipeConfig"
 
 direction: any , horizonal, vertical, right, left, up, down
 modifiers: lock
+swipeConfig: {
+  onSwipe:     Function,
+  onSwipeDone: Function
+}
 ```
 
-### 参数解析
+### 回调参数
 
 ```javascript
 var info = {
@@ -52,7 +57,6 @@ var info = {
 
 var lock        = Function(Boolean); // lock(true/false)        是否执行preventDefault
 var propagation = Function(Boolean); // propagation(true/false) 是否执行stopPropagation
-
 ```
 
 ## License
