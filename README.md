@@ -27,6 +27,14 @@
 </script>
 ```
 
+#### swipeDirective的参数
+```
+v-swipe:direction.lock="swipeConfig"
+
+direction: any , horizonal, vertical, right, left, up, down
+modifiers: lock
+```
+
 ### 参数解析
 
 ```javascript
