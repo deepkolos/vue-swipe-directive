@@ -73,15 +73,24 @@ const swipeDirective = {
 
         check = [directionFour, directionTwo].includes(binding.arg) || binding.arg === 'any'
 
-        directionCheckDone === null && (
+        if (directionCheckDone === null) {
+          check === true &&
+          processor.start instanceof Function && (
+            processor.start(getInfo(e), (setTo) => {
+              lockCheck = setTo
+            }, (setTo) => {
+              continuePropagation = setTo
+            })
+          )
+
           directionCheckDone = check
-        )
+        }
 
         if (directionCheckDone) {
           lock && (lockCheck = true)
 
-          processor.onSwipe instanceof Function && (
-            processor.onSwipe(getInfo(), (setTo) => {
+          processor.move instanceof Function && (
+            processor.move(getInfo(e), (setTo) => {
                 lockCheck = setTo
               }, (setTo) => {
                 continuePropagation = setTo
@@ -97,8 +106,8 @@ const swipeDirective = {
         continuePropagation = true
         lock && directionCheckDone && (lockCheck = true)
 
-        directionCheckDone && processor.onSwipeDone instanceof Function && (
-          processor.onSwipeDone(getInfo(), (setTo) => {
+        directionCheckDone && processor.end instanceof Function && (
+          processor.end(getInfo(e), (setTo) => {
               lockCheck = setTo
             }, (setTo) => {
               continuePropagation = setTo

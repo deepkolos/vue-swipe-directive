@@ -14,8 +14,9 @@
   export default {
     mounted () {
       this.swipeConfig = {
-        onSwipe:     (info, lock, propagation) => console.log(info),
-        onSwipeDone: (info, lock, propagation) => console.log(info)
+        start: (info, lock, propagation) => console.log(info),
+        move:  (info, lock, propagation) => console.log(info),
+        end:   (info, lock, propagation) => console.log(info)
       }
     },
 
@@ -29,14 +30,16 @@
 
 #### swipeDirective的参数
 
-```
+```js
 v-swipe:direction.lock="swipeConfig"
 
 direction: any , horizonal, vertical, right, left, up, down
 modifiers: lock
+
 swipeConfig: {
-  onSwipe:     Function,
-  onSwipeDone: Function
+  start: Function,
+  move:  Function,
+  end:   Function
 }
 ```
 
