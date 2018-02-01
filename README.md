@@ -30,11 +30,12 @@
 
 #### swipeDirective的参数
 
-```js
-v-swipe:direction.lock="swipeConfig"
+```vue
+<div v-swipe:direction.lock="swipeConfig"></div>
 
-direction: any , horizonal, vertical, right, left, up, down
+direction: any, horizonal, vertical, right, left, up, down
 modifiers: lock
+// 当识别到direction的时候就会lock, 会和滚动互斥, 事件不会往上冒泡
 
 swipeConfig: {
   start: Function,
@@ -45,21 +46,21 @@ swipeConfig: {
 
 ### 回调参数
 
-```javascript
-var info = {
-      scrEvt: Event,
-      offset: Number,
-      startY: Number,
-      startX: Number,
-      movingX: Number,
-      movingY: Number,
-      element: HTMLElement,
-      directionTwo: String,  // horizonal, vertical
-      directionFour: String, // right, left, up, down
-    };
+```js
+info = {
+  scrEvt: Event,
+  offset: Number,
+  startY: Number,
+  startX: Number,
+  movingX: Number,
+  movingY: Number,
+  element: HTMLElement,
+  directionTwo: String,  // horizonal, vertical
+  directionFour: String, // right, left, up, down
+};
 
-var lock        = Function(Boolean); // lock(true/false)        是否执行preventDefault
-var propagation = Function(Boolean); // propagation(true/false) 是否执行stopPropagation
+lock        = Function(Boolean); // lock(true/false)        是否执行preventDefault
+propagation = Function(Boolean); // propagation(true/false) 是否执行stopPropagation
 ```
 
 ## License

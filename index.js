@@ -1,4 +1,3 @@
-
 const swipeDirective = {
   bind: function ($el, binding) {
     // any , horizonal, vertical, right, left, up, down
@@ -123,5 +122,5 @@ const swipeDirective = {
   }
 }
 
-export default swipeDirective
 export { swipeDirective }
+export default swipeDirective
