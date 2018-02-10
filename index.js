@@ -23,6 +23,8 @@ const swipeDirective = {
     var offset
     var directionCheckDone
     var continuePropagation
+    var startWidthTwo
+    var startWidthFour
 
     function getInfo (srcEvt) {
       return {
@@ -35,6 +37,8 @@ const swipeDirective = {
         movingY: movingY,
         directionTwo: directionTwo,
         directionFour: directionFour,
+        startWidthTwo: startWidthTwo,
+        startWidthFour: startWidthFour
       }
     }
 
@@ -46,6 +50,8 @@ const swipeDirective = {
         startY = e.touches[0].clientY
         directionTwo = null
         directionCheckDone = null
+        startWidthTwo = null
+        startWidthFour = null
         continuePropagation = false
       })
 
@@ -73,14 +79,17 @@ const swipeDirective = {
         check = [directionFour, directionTwo].includes(binding.arg) || binding.arg === 'any'
 
         if (directionCheckDone === null) {
-          check === true &&
-          processor.start instanceof Function && (
-            processor.start(getInfo(e), (setTo) => {
-              lockCheck = setTo
-            }, (setTo) => {
-              continuePropagation = setTo
-            })
-          )
+          if (check === true) {
+            startWidthTwo = directionTwo
+            startWidthFour = directionFour
+            processor.start instanceof Function && (
+              processor.start(getInfo(e), (setTo) => {
+                lockCheck = setTo
+              }, (setTo) => {
+                continuePropagation = setTo
+              })
+            )
+          }
 
           directionCheckDone = check
         }
