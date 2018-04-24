@@ -2,7 +2,7 @@
   "name": "vue-swipe-directive",
   "version": "0.1.0",
   "description": "vue swipe事件的实现, 特点是lock机制, 轻松实现和滚动互斥关系",
-  "main": "index.js",
+  "main": "index.out.js",
   "scripts": {
     "test": "echo ok"
   },
@@ -19,5 +19,12 @@
   "bugs": {
     "url": "https://github.com/deepkolos/vue-swipe-directive/issues"
   },
-  "homepage": "https://github.com/deepkolos/vue-swipe-directive#readme"
+  "homepage": "https://github.com/deepkolos/vue-swipe-directive#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.15"
+  }
 }
