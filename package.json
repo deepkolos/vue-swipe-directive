@@ -1,6 +1,6 @@
 {
   "name": "vue-swipe-directive",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "vue swipe事件的实现, 特点是lock机制, 轻松实现和滚动互斥关系",
   "main": "index.out.js",
   "scripts": {
