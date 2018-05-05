@@ -4,7 +4,9 @@ module.exports = {
   entry: "./index.js",
   output: {
     path: path.resolve(__dirname, ""),
-    filename: "./index.out.js"
+    filename: "./index.out.js",
+    libraryExport: "default",
+    libraryTarget: "umd"
   },
 
   module: {
