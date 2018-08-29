@@ -1,4 +1,4 @@
-module.exports = {
+const directive = {
   bind: function($el, binding) {
     // any , horizonal, vertical, right, left, up, down
     // modifiers: lock
@@ -141,3 +141,5 @@ module.exports = {
     }
   }
 };
+
+export default directive;
