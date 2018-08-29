@@ -9,20 +9,20 @@
 </template>
 
 <script>
-  import { swipeDirective } from '../../mixins/event/swipe.js'
+  import swipeDirective from 'vue-swipe-directive'
 
   export default {
+    directives: {
+      // 指令名字可自定义
+      swipe: swipeDirective
+    },
+
     mounted () {
       this.swipeConfig = {
         start: (info, lock, propagation) => console.log(info),
         move:  (info, lock, propagation) => console.log(info),
         end:   (info, lock, propagation) => console.log(info)
       }
-    },
-
-    directives: {
-      // 指令名字可自定义
-      swipe: swipeDirective
     }
   }
 </script>
