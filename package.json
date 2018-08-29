@@ -33,6 +33,7 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8",
-    "chrome 48"
+    "chrome 48",
+    "IOS 8"
   ]
 }
