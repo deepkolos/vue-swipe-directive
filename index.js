@@ -113,7 +113,7 @@ const directive = {
               }
             );
           !continuePropagation && e.stopPropagation();
-          lockCheck && e.preventDefault();
+          lockCheck && e.cancelable && e.preventDefault();
         }
       });
 
@@ -134,7 +134,7 @@ const directive = {
             }
           );
         !continuePropagation && e.stopPropagation();
-        lockCheck && e.preventDefault();
+        lockCheck && e.cancelable && e.preventDefault();
       });
     } else {
       console.log(`未知自定义swipe位置参数:${binding.argument}`);
