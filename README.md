@@ -19,9 +19,10 @@
 
     mounted () {
       this.swipeConfig = {
+        cancel:(info, lock, propagation) => console.log(info),
         start: (info, lock, propagation) => console.log(info),
         move:  (info, lock, propagation) => console.log(info),
-        end:   (info, lock, propagation) => console.log(info)
+        end:   (info, lock, propagation) => console.log(info),
       }
     }
   }

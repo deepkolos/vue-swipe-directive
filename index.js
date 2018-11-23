@@ -26,6 +26,7 @@ const directive = {
     var continuePropagation;
     var startWidthTwo;
     var startWidthFour;
+    var canceled;
 
     function getInfo(srcEvt) {
       return {
@@ -46,47 +47,86 @@ const directive = {
     // offset的含义由directionTwo来确定的
 
     if (argument.includes(binding.arg)) {
-      $el.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        directionTwo = null;
-        directionCheckDone = null;
-        startWidthTwo = null;
-        startWidthFour = null;
-        continuePropagation = false;
-      }, capture);
+      $el.addEventListener(
+        'touchstart',
+        function(e) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          directionTwo = null;
+          directionCheckDone = null;
+          startWidthTwo = null;
+          startWidthFour = null;
+          continuePropagation = false;
+          canceled = false;
+        },
+        capture
+      );
 
-      $el.addEventListener('touchmove', function(e) {
-        movingX = e.touches[0].clientX;
-        movingY = e.touches[0].clientY;
+      $el.addEventListener(
+        'touchmove',
+        function(e) {
+          movingX = e.touches[0].clientX;
+          movingY = e.touches[0].clientY;
 
-        var x = movingX - startX;
-        var y = movingY - startY;
-        var lockCheck = false;
-        var check;
+          var x = movingX - startX;
+          var y = movingY - startY;
+          var lockCheck = false;
+          var check;
 
-        (directionTwo == null || binding.arg === 'any') &&
-          (directionTwo =
-            Math.abs(y) <= Math.abs(x) ? 'horizonal' : 'vertical');
+          (directionTwo == null || binding.arg === 'any') &&
+            (directionTwo =
+              Math.abs(y) <= Math.abs(x) ? 'horizonal' : 'vertical');
 
-        if (directionTwo === 'vertical') {
-          offset = y;
-          directionFour = y < 0 ? 'up' : 'down';
-        } else {
-          offset = x;
-          directionFour = x > 0 ? 'right' : 'left';
-        }
+          if (directionTwo === 'vertical') {
+            offset = y;
+            directionFour = y < 0 ? 'up' : 'down';
+          } else {
+            offset = x;
+            directionFour = x > 0 ? 'right' : 'left';
+          }
 
-        check =
-          [directionFour, directionTwo].includes(binding.arg) ||
-          binding.arg === 'any';
+          check =
+            [directionFour, directionTwo].includes(binding.arg) ||
+            binding.arg === 'any';
 
-        if (directionCheckDone === null) {
-          if (check === true) {
-            startWidthTwo = directionTwo;
-            startWidthFour = directionFour;
-            processor.start instanceof Function &&
-              processor.start(
+          if (directionCheckDone === null) {
+            if (check === true) {
+              startWidthTwo = directionTwo;
+              startWidthFour = directionFour;
+              processor.start instanceof Function &&
+                processor.start(
+                  getInfo(e),
+                  setTo => {
+                    lockCheck = setTo;
+                  },
+                  setTo => {
+                    continuePropagation = setTo;
+                  }
+                );
+            }
+
+            directionCheckDone = check;
+          }
+
+          if (directionCheckDone) {
+            lock && (lockCheck = true);
+
+            processor.move instanceof Function &&
+              processor.move(
+                getInfo(e),
+                setTo => {
+                  lockCheck = setTo;
+                },
+                setTo => {
+                  continuePropagation = setTo;
+                }
+              );
+            !continuePropagation && e.stopPropagation();
+            lockCheck && e.cancelable && e.preventDefault();
+          } else if (!canceled) {
+            canceled = true;
+            processor.cancel instanceof Function &&
+              processor.cancel(
                 getInfo(e),
                 setTo => {
                   lockCheck = setTo;
@@ -96,15 +136,20 @@ const directive = {
                 }
               );
           }
+        },
+        capture
+      );
 
-          directionCheckDone = check;
-        }
+      $el.addEventListener(
+        'touchend',
+        function(e) {
+          var lockCheck = false;
+          continuePropagation = true;
+          lock && directionCheckDone && (lockCheck = true);
 
-        if (directionCheckDone) {
-          lock && (lockCheck = true);
-
-          processor.move instanceof Function &&
-            processor.move(
+          directionCheckDone &&
+            processor.end instanceof Function &&
+            processor.end(
               getInfo(e),
               setTo => {
                 lockCheck = setTo;
@@ -115,28 +160,9 @@ const directive = {
             );
           !continuePropagation && e.stopPropagation();
           lockCheck && e.cancelable && e.preventDefault();
-        }
-      }, capture);
-
-      $el.addEventListener('touchend', function(e) {
-        var lockCheck = false;
-        continuePropagation = true;
-        lock && directionCheckDone && (lockCheck = true);
-
-        directionCheckDone &&
-          processor.end instanceof Function &&
-          processor.end(
-            getInfo(e),
-            setTo => {
-              lockCheck = setTo;
-            },
-            setTo => {
-              continuePropagation = setTo;
-            }
-          );
-        !continuePropagation && e.stopPropagation();
-        lockCheck && e.cancelable && e.preventDefault();
-      }, capture);
+        },
+        capture
+      );
     } else {
       console.log(`未知自定义swipe位置参数:${binding.argument}`);
     }
