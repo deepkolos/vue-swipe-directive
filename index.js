@@ -1,7 +1,7 @@
 const directive = {
   bind: function($el, binding) {
     // any , horizonal, vertical, right, left, up, down
-    // modifiers: lock
+    // modifiers: lock, capture
     var argument = [
       'any',
       'horizonal',
@@ -13,6 +13,7 @@ const directive = {
     ];
 
     var lock = binding.modifiers.lock;
+    var capture = binding.modifiers.capture;
     var processor = binding.value;
     var startX;
     var startY;
@@ -53,7 +54,7 @@ const directive = {
         startWidthTwo = null;
         startWidthFour = null;
         continuePropagation = false;
-      });
+      }, capture);
 
       $el.addEventListener('touchmove', function(e) {
         movingX = e.touches[0].clientX;
@@ -115,7 +116,7 @@ const directive = {
           !continuePropagation && e.stopPropagation();
           lockCheck && e.cancelable && e.preventDefault();
         }
-      });
+      }, capture);
 
       $el.addEventListener('touchend', function(e) {
         var lockCheck = false;
@@ -135,7 +136,7 @@ const directive = {
           );
         !continuePropagation && e.stopPropagation();
         lockCheck && e.cancelable && e.preventDefault();
-      });
+      }, capture);
     } else {
       console.log(`未知自定义swipe位置参数:${binding.argument}`);
     }
