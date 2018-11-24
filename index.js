@@ -15,7 +15,6 @@ const directive = {
     var lock = binding.modifiers.lock;
     var capture = binding.modifiers.capture;
     var processor = binding.value;
-    var enable = binding.value.enable || true;
     var startX;
     var startY;
     var movingX;
@@ -28,6 +27,8 @@ const directive = {
     var startWidthTwo;
     var startWidthFour;
     var canceled;
+    var enable =
+      binding.value.enable !== undefined ? binding.value.enable : true;
 
     function getInfo(srcEvt) {
       return {
