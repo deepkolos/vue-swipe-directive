@@ -15,6 +15,7 @@ const directive = {
     var lock = binding.modifiers.lock;
     var capture = binding.modifiers.capture;
     var processor = binding.value;
+    var enable = binding.value.enable || true;
     var startX;
     var startY;
     var movingX;
@@ -46,7 +47,7 @@ const directive = {
 
     // offset的含义由directionTwo来确定的
 
-    if (argument.includes(binding.arg)) {
+    if (argument.includes(binding.arg) && enable) {
       $el.addEventListener(
         'touchstart',
         function(e) {
