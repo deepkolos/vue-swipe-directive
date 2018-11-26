@@ -166,7 +166,7 @@ const directive = {
         capture
       );
     } else {
-      console.log(`未知自定义swipe位置参数:${binding.argument}`);
+      enable && console.log(`未知自定义swipe位置参数:${binding.arg}`);
     }
   }
 };
